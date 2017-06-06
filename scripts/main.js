@@ -42,6 +42,9 @@ function FriendlyChat() {
   this.signOutButton.addEventListener('click', this.signOut.bind(this));
   this.signInButton.addEventListener('click', this.signIn.bind(this));
 
+  // Listeners de mensagens
+  this.messageForm.addEventListener('submit', this.saveMessage.bind(this));
+
   //Inicializa o Firebase
   this.initFirebase();
 }
