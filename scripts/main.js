@@ -314,6 +314,10 @@ FriendlyChat.prototype.setImageUrl = function(imageUri, imgElement) {
   }
 };
 
+/***********************************************************
+ * INSTANCIA
+ ***********************************************************/
+
 // Instancia a classe
 window.onload = function() {
   window.friendlyChat = new FriendlyChat();
