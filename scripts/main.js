@@ -33,22 +33,14 @@ function FriendlyChat() {
   this.signOutButton = document.getElementById('sign-out');
   this.signInSnackbar = document.getElementById('must-signin-snackbar');
 
-  // Listeners de eventos para envio de mensagens
-  this.messageForm.addEventListener('submit', this.saveMessage.bind(this));
-  this.signOutButton.addEventListener('click', this.signOut.bind(this));
-  this.signInButton.addEventListener('click', this.signIn.bind(this));
-
-  // Listeners de eventos para o botão
+  // Listeners do front-end
   var buttonTogglingHandler = this.toggleButton.bind(this);
   this.messageInput.addEventListener('keyup', buttonTogglingHandler);
   this.messageInput.addEventListener('change', buttonTogglingHandler);
 
-  // Listeners de eventos para upload de imagens
-  this.submitImageButton.addEventListener('click', function(e) {
-    e.preventDefault();
-    this.mediaCapture.click();
-  }.bind(this));
-  this.mediaCapture.addEventListener('change', this.saveImageMessage.bind(this));
+  // Listeners de autenticação
+  this.signOutButton.addEventListener('click', this.signOut.bind(this));
+  this.signInButton.addEventListener('click', this.signIn.bind(this));
 
   //Inicializa o Firebase
   this.initFirebase();
