@@ -218,6 +218,32 @@ FriendlyChat.prototype.loadMessages = function() {
 };
 
 /***********************************************************
+ * ENVIAR TEXTO
+ ***********************************************************/
+
+// Salva uma nova mensagem do Firebase DB
+FriendlyChat.prototype.saveMessage = function(e) {
+  e.preventDefault();
+
+  // Verifica se o usuário digitou uma mensagem e está logado
+  if (this.messageInput.value && this.checkSignedInWithMessage()) {
+    var currentUser = this.auth.currentUser;
+
+    //Após o "push" da mensagem o materialTextField é resetado e o botão volta a ser bloqueado
+    this.messagesRef.push({
+      name: currentUser.displayName,
+      text: this.messageInput.value,
+      photoURL: currentUser.photoURL || '/images/profile_placeholder.png'
+    }).then(function(){
+        FriendlyChat.resetMaterialTextfield(this.messageInput);
+        this.toggleButton();
+    }.bind(this)).catch(function(error){
+        console.error('Error writing new message to Firebase Database', error);
+    });
+  }
+};
+
+/***********************************************************
  * INSTANCIA
  ***********************************************************/
 
