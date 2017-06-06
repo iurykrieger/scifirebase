@@ -147,10 +147,71 @@ FriendlyChat.prototype.initFirebase = function() {
 };
 
 /***********************************************************
+ * AUTENTICAÇÃO
+ ***********************************************************/
+
+// Loga no FriendlyChat
+FriendlyChat.prototype.signIn = function() {
+  var provider = new firebase.auth.GoogleAuthProvider();
+  this.auth.signInWithPopup(provider);
+};
+
+// Desloga do FriendlyChat
+FriendlyChat.prototype.signOut = function() {
+  this.auth.signOut();
+};
+
+// Função executada quando o estado da autenticação é modificado (login/logout)
+FriendlyChat.prototype.onAuthStateChanged = function(user) {
+  if (user) { //usuário logado
+
+    // Atribui a imagem e nome de perfil
+    this.userPic.style.backgroundImage = 'url(' + user.photoURL + ')';
+    this.userName.textContent = user.displayName;
+
+    // Exibe a foto de perfil e botão de logout
+    this.userName.removeAttribute('hidden');
+    this.userPic.removeAttribute('hidden');
+    this.signOutButton.removeAttribute('hidden');
+
+    // Esconde botão de login
+    this.signInButton.setAttribute('hidden', 'true');
+
+    // Carrega as mensagens
+    this.loadMessages();
+
+  } else { // usuário deslogado
+    // Esconde foto de perfil e botão de logout
+    this.userName.setAttribute('hidden', 'true');
+    this.userPic.setAttribute('hidden', 'true');
+    this.signOutButton.setAttribute('hidden', 'true');
+
+    // Exibe botão de login
+    this.signInButton.removeAttribute('hidden');
+  }
+};
+
+// Verifica se o usuário está logado, senão exibe uma mensagem
+FriendlyChat.prototype.checkSignedInWithMessage = function() {
+  // Se logado retorna verdadeiro
+  if(this.auth.currentUser){
+    return true;
+  }
+
+  // Se não logado retorna mensagem
+  var data = {
+    message: 'You must sign-in first',
+    timeout: 2000
+  };
+  this.signInSnackbar.MaterialSnackbar.showSnackbar(data);
+  return false;
+};
+
+/***********************************************************
  * INSTANCIA
  ***********************************************************/
 
 // Instancia a classe
 window.onload = function() {
-
+  window.friendlyChat = new FriendlyChat();
 };
