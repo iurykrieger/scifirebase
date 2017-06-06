@@ -42,9 +42,6 @@ function FriendlyChat() {
   this.signOutButton.addEventListener('click', this.signOut.bind(this));
   this.signInButton.addEventListener('click', this.signIn.bind(this));
 
-  // Listeners de mensagens
-  this.messageForm.addEventListener('submit', this.saveMessage.bind(this));
-
   //Inicializa o Firebase
   this.initFirebase();
 }
@@ -94,7 +91,7 @@ FriendlyChat.prototype.displayMessage = function(key, name, text, picUrl, imageU
     image.addEventListener('load', function() {
       this.messageList.scrollTop = this.messageList.scrollHeight;
     }.bind(this));
-    this.setImageUrl(imageUri, image);
+    //this.setImageUrl(imageUri, image);
 
     // Adiciona o elemento no DOM
     messageElement.innerHTML = '';
@@ -200,6 +197,24 @@ FriendlyChat.prototype.checkSignedInWithMessage = function() {
   };
   this.signInSnackbar.MaterialSnackbar.showSnackbar(data);
   return false;
+};
+
+/***********************************************************
+ * MENSAGENS
+ ***********************************************************/
+
+// Carrega as mensagens e escuta as próximas
+FriendlyChat.prototype.loadMessages = function() {
+  this.messagesRef = this.database.ref('messages');
+  this.messagesRef.off();
+
+  var setMessage = function(data){
+    var val = data.val();
+    this.displayMessage(data.key, val.name, val.text, val.photoURL, val.imageUrl);
+  }.bind(this);
+
+  this.messagesRef.limitToLast(20).on('child_added', setMessage);
+  this.messagesRef.limitToLast(20).on('child_changed', setMessage);
 };
 
 /***********************************************************
