@@ -127,6 +127,26 @@ FriendlyChat.resetMaterialTextfield = function(element) {
 };
 
 /***********************************************************
+ * INICIALIZAÇÃO
+ ***********************************************************/
+
+// Verifica se o Firebase SDK foi corretamente configurado
+FriendlyChat.prototype.checkSetup = function() {
+  if (!window.firebase || !(firebase.app instanceof Function) || !firebase.app().options) {
+    window.alert('Problemas na configuração do Firebase SDK!');
+  }
+};
+
+// Atribui atalhos as instancias do firebase e inicializa a autenticação
+FriendlyChat.prototype.initFirebase = function() {
+  this.auth = firebase.auth();
+  this.database = firebase.database();
+  this.storage = firebase.storage();
+
+  this.auth.onAuthStateChanged(this.onAuthStateChanged.bind(this));
+};
+
+/***********************************************************
  * INSTANCIA
  ***********************************************************/
 
